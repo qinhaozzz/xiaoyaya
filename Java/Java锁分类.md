@@ -36,3 +36,22 @@ public void modifyPublicResources() {
 private AtomicInteger atomicInteger = new AtomicInteger();  // 需要保证多个线程使用的是同一个AtomicInteger
 atomicInteger.incrementAndGet(); //执行自增1
 ```
+无锁/偏向锁/轻量级锁/重量级锁
+------
+* 锁状态只能升级不能降级
+
+独享锁/共享锁
+------
+独享锁是指该锁一次只能被一个线程所持有。  
+共享锁是指该锁可被多个线程所持有。
+
+对于Java`ReentrantLock`而言，其是独享锁。但是对于Lock的另一个实现类`ReadWriteLock`，其读锁是共享锁，其写锁是独享锁。
+读锁的共享锁可保证并发读是非常高效的，读写，写读 ，写写的过程是互斥的。
+独享锁与共享锁也是通过AQS来实现的，通过实现不同的方法，来实现独享或者共享。
+对于Synchronized而言，当然是独享锁。
+
+互斥锁/读写锁
+------
+上面讲的独享锁/共享锁就是一种广义的说法，互斥锁/读写锁就是具体的实现。  
+> 互斥锁在Java中的具体实现就是ReentrantLock  
+读写锁在Java中的具体实现就是ReadWriteLock
