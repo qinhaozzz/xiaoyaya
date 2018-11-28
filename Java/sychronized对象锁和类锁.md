@@ -14,7 +14,7 @@ public Class Test{
   }
 
   // 2.静态方法方式
-  public static synchronized test2(){
+  public static synchronized void test2(){
     // TODO
   }
 }
