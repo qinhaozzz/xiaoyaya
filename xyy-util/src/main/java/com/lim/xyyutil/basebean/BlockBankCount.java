@@ -1,5 +1,6 @@
 package com.lim.xyyutil.basebean;
 
+import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -9,6 +10,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public class BlockBankCount {
 
     private Integer count = 0;
+    /**
+     * 声明为成员变量,保证多个线程使用的是同一个锁
+     */
     private Lock lock = new ReentrantLock();
 
     public void add(Integer money) {
@@ -41,6 +45,18 @@ public class BlockBankCount {
             System.out.println(Thread.currentThread().getName() + " count $" + count);
         } finally {
             lock.unlock();
+        }
+    }
+
+    public void testInterrupt() throws InterruptedException {
+        lock.lockInterruptibly();
+        try {
+            System.out.println(Thread.currentThread().getName() + " got lock");
+        } catch (Exception e) {
+
+        } finally {
+            lock.unlock();
+            System.out.println(Thread.currentThread().getName() + " unlock");
         }
     }
 }

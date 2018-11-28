@@ -28,7 +28,11 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-data-redis')
     implementation('org.springframework.boot:spring-boot-starter-freemarker')
     implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-aop')
     compileOnly('org.projectlombok:lombok')
     implementation('org.springframework.boot:spring-boot-starter-test')
     compile group: 'org.apache.poi', name: 'poi', version: '4.0.0'
+    /*google guava 工具类*/
+    compile group: 'com.google.guava', name: 'guava', version: '23.0'
+
 }

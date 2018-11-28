@@ -1,7 +1,5 @@
 package com.lim.xyyutil.util;
 
-import com.lim.xyyutil.basebean.AnimalZoo;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
