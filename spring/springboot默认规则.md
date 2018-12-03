@@ -42,11 +42,11 @@ Spring Boot默认Package
 ```
 @ComponentScan注解
 ------
-ComponentScan 注解是 @SpringBootApplication 继承的注解之一，它的作用是搜索需要被IOC容器管理的bean类，就是通常所说的扫描注解的包。(This part of “telling Spring where to search for Spring Beans is by adding the right annotation” is called a ComponentScan.)
+ComponentScan 注解是 @SpringBootApplication 继承的注解之一，它的作用是搜索需要被IOC容器管理的bean类，就是通常所说的扫描注解的包。(This part of “telling Spring where to search for Spring Beans by adding the right annotation” is called a ComponentScan.)
 
 `Spring Boot中，@ComponentScan 默认值就是 SpringBootApplication 启动类所在的包。`
 当然也可以定义被扫描的包：
 ```java
-Define @ComponentScan(“com.lim.xyyutil)
-Define @ComponentScan({“com.lim.xyyutil.controller,”com.lim.other.service})
+Define @ComponentScan("com.lim.xyyutil")
+Define @ComponentScan({"com.lim.xyyutil.controller","com.lim.other.service"})
 ```
