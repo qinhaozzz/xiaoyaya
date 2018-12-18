@@ -1,3 +1,0 @@
-@Configuration
-------
-告诉Spring，功能和spring中的xml配置文件相同
