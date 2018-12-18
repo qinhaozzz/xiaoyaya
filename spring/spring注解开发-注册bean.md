@@ -1,6 +1,6 @@
 @Configuration
 ------
-**告诉Spring，和spring中的xml配置文件相同**
+**告诉Spring是IOC配置类，和spring中的xml配置文件相同**
 1. 可以通过AnnotationConfigApplicationContext获取IOC容器
 
 ```java
@@ -16,8 +16,8 @@ MyBean myBean = ctx.getBean(MyBean.class);
 ```
 @Bean
 ------
-**注册bean，和<bean/>功能相同**
-1. bean默认id为方法名（可以通过applicationContext.getBeanDefinitionNames()查看bean的id）
+**注册bean，和`<bean/>标签`功能相同**
+1. bean默认id为方法名（可以通过applicationContext.getBeanDefinitionNames()查看bean的id值）
 2. bean默认类型为方法返回类型
 
 @ComponentScan
@@ -32,7 +32,8 @@ MyBean myBean = ctx.getBean(MyBean.class);
   1. 通过@ComponentScan.Filter配置不扫描的注解，参数type和classes
   2. type=""，过滤方式，通过FilterType配置
   3. classes={}，类对象
-3. includeFilters={}，扫描的时候只包含的注解，配置时需要禁用默认扫描规则
+3. includeFilters={}，扫描的时候只包含的注解，**配置时需要禁用默认扫描规则，即useDefaultFilters=false**
+4. JDK1.8后可以在一个类上面配置多个@ComponentScan注解，或者使用@ComponentScans配置多个扫描策略即@ComponentScan
 
 ```java
 // 示例
@@ -62,17 +63,15 @@ public enum FilterType {
    */
 	REGEX,
   /**
-   * 自定义规则
+   * 自定义规则,即实现TypeFilter接口,重写match方法
    */
 	CUSTOM
 }
-```
-4. JDK1.8后可以在一个类上面配置多个@ComponentScan注解，或者使用@ComponentScans配置多个扫描策略即@ComponentScan
 
-```java
+// 配置多个ComponentScan
 @ComponentScans(value={@ComponentScan(),@ComponentScan()})
 ```
-@ComponentScan自定义扫描规则，TypeFilter
+@ComponentScan自定义扫描规则——TypeFilter
 ------
 ```java
 
