@@ -18,6 +18,7 @@ MyBean myBean = ctx.getBean(MyBean.class);
 ------
 **注册bean，和`<bean/>标签`功能相同**
 1. bean默认id为方法名（可以通过applicationContext.getBeanDefinitionNames()查看bean的id值）
+
 2. bean默认类型为方法返回类型
 
 @ComponentScan
@@ -26,13 +27,16 @@ MyBean myBean = ctx.getBean(MyBean.class);
 
 配置扫描带有Spring注解的包
 
-**用法**
+**详情**
 1. basePackages = {"com.lim.bean.inner"}，指定扫描的包
+
 2. excludeFilters={}，扫面的时候不包含的注解
-  1. 通过@ComponentScan.Filter配置不扫描的注解，参数type和classes
-  2. type=""，过滤方式，通过FilterType配置
-  3. classes={}，类对象
+  * 通过@ComponentScan.Filter配置不扫描的注解，参数type和classes
+  * type=""，过滤方式，通过FilterType配置
+  * classes={}，类对象
+
 3. includeFilters={}，扫描的时候只包含的注解，**配置时需要禁用默认扫描规则，即useDefaultFilters=false**
+
 4. JDK1.8后可以在一个类上面配置多个@ComponentScan注解，或者使用@ComponentScans配置多个扫描策略即@ComponentScan
 
 ```java
@@ -106,6 +110,131 @@ public class CustomTypeFilter implements TypeFilter {
         Resource resource = metadataReader.getResource();
         // 返回true表示匹配
         return false;
+    }
+}
+```
+@Scope
+------
+**简介**
+
+IOC容器中注册bean的作用域
+
+**详情**
+
+1. ConfigurableBeanFactory#SCOPE_PROTOTYPE("singleton")，默认是单实例模式 > IOC容器启动时将创建并初始化单实例对象 > 获取的对象都是同一个bean对象
+
+2. ConfigurableBeanFactory#SCOPE_SINGLETON("prototype")，多实例模式 > IOD容器启动时不会创建对象，当获取对象getBean()时才会创建对象
+
+3. org.springframework.web.context.WebApplicationContext#SCOPE_REQUEST("request")
+
+4. org.springframework.web.context.WebApplicationContext#SCOPE_SESSION("session")
+
+@Lazy
+------
+**简介**
+
+懒加载：容器启动时不创建对象，第一次获取对象getBean时才会创建并初始化对象
+
+```java
+import com.lim.bean.Person;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
+
+/**
+ * <h3>{@code @Scope}</h3>
+ * <h3>懒加载{@code @Lazy}</h3>
+ *
+ * @author qinhao
+ */
+@Configuration
+public class MainConfig2 {
+
+    @Scope("singleton")
+    @Bean
+    public Person singletonPerson() {
+        System.out.println("singletonPerson()...");
+        return new Person();
+    }
+
+    @Lazy
+    @Scope("singleton")
+    @Bean
+    public Person singletonLazyPerson() {
+        System.out.println("singletonLazyPerson()...");
+        return new Person();
+    }
+
+    @Scope("prototype")
+    @Bean
+    public Person prototypePerson() {
+        System.out.println("prototypePerson()...");
+        return new Person();
+    }
+}
+```
+@Conditaional
+------
+**简介**
+
+根据条件判断该Bean是否需要被注册
+
+**详情**
+
+@Profile
+------
+**简介**
+
+profile就是一组配置，不同profile提供不同组合的配置，程序运行时可以选择使用哪些profile来适应环境。功能与@Conditional类似，都是当bean达到特定的条件时才会被注册。常用的profile配置方法有三种如下:
+* 设置IOC容器环境变量Environment
+
+```java
+// 注册bean
+@Bean("japanese")
+@Profile("mainConfig3")
+public Person japanese() {
+    return new Person("东野圭吾", 60);
+}
+// 通过environment设置active profile
+AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+applicationContext.getEnvironment().setActiveProfiles("mainConfig");
+/**
+ * 需要先给context设置参数，然后再注册Bean配置类，否则会出现Bean未定义异常NoSuchBeanDefinitionException
+ */
+applicationContext.register(MainConfig3.class);
+// 刷新容器
+applicationContext.refresh();
+Person japanese = applicationContext.getBean("japanese");
+```
+* JVM参数spring.profiles.active
+
+```java
+-Dspring.profiles.active=mainConfig3
+```
+* web中通过servlet的context paramter参数设置
+
+```java
+// servlet2.5版本之前
+<servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>spring.profiles.active</param-name>
+            <param-value>production</param-value>
+        </init-param>
+</servlet>
+
+// servlet3.0版本之后
+import javax.servlet.ServletContext;
+
+import org.springframework.web.WebApplicationInitializer;
+
+public class CustomInitializer implements WebApplicationInitializer{
+
+    @Override
+    public void onStartup(ServletContext container) throws ServletException {
+        container.setInitParameter("spring.profiles.active","mainConfig");
     }
 }
 ```
