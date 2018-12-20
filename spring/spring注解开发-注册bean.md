@@ -1,6 +1,12 @@
 @Configuration
 ------
-**告诉Spring是IOC配置类，和spring中的xml配置文件相同**
+**简介**
+
+声明当前类是一个配置类，相当于一个Spring配置的xml文件。把一个类作为一个IoC容器
+和@Bean搭配使用，某个方法头上如果注册了@Bean，就会作为这个Spring容器中的Bean。
+
+**详情**
+
 1. 可以通过AnnotationConfigApplicationContext获取IOC容器
 
 ```java
@@ -16,7 +22,11 @@ MyBean myBean = ctx.getBean(MyBean.class);
 ```
 @Bean
 ------
-**注册bean，和`<bean/>标签`功能相同**
+**简介**
+
+声明当前方法的返回值为一个Bean，和`<bean/>标签`功能相同
+
+**详情**
 1. bean默认id为方法名（可以通过applicationContext.getBeanDefinitionNames()查看bean的id值）
 
 2. bean默认类型为方法返回类型
@@ -25,7 +35,7 @@ MyBean myBean = ctx.getBean(MyBean.class);
 ------
 **简介**
 
-配置扫描带有Spring注解的包
+自动扫描配置包名下所有使用@Service、@Compent、@Repository、@Controller的类，并注册为Bean.
 
 **详情**
 1. basePackages = {"com.lim.bean.inner"}，指定扫描的包
@@ -77,6 +87,11 @@ public enum FilterType {
 ```
 @ComponentScan自定义扫描规则——TypeFilter
 ------
+**简介**
+
+当@Filter中type为FilterType.CUSTOM时，需要传入TypeFilter的实现类，通过自定义的规则判断当前扫描的类是否匹配
+
+**详情**
 ```java
 
 package com.lim.filter;
@@ -121,13 +136,13 @@ IOC容器中注册bean的作用域
 
 **详情**
 
-1. ConfigurableBeanFactory#SCOPE_PROTOTYPE("singleton")，默认是单实例模式 > IOC容器启动时将创建并初始化单实例对象 > 获取的对象都是同一个bean对象
+1. ConfigurableBeanFactory#SCOPE_PROTOTYPE("singleton")，默认是单实例模式 > IOC容器启动时将创建并初始化单实例对象 > 一个spring容器中只有一个Bean的实例，全容器共享一个实例。
 
-2. ConfigurableBeanFactory#SCOPE_SINGLETON("prototype")，多实例模式 > IOD容器启动时不会创建对象，当获取对象getBean()时才会创建对象
+2. ConfigurableBeanFactory#SCOPE_SINGLETON("prototype")，多实例模式 > IOD容器启动时不会创建对象，当获取对象getBean()时都会新建一个对象
 
-3. org.springframework.web.context.WebApplicationContext#SCOPE_REQUEST("request")
+3. org.springframework.web.context.WebApplicationContext#SCOPE_REQUEST("request") > 给每一个http request新建一个Bean实例
 
-4. org.springframework.web.context.WebApplicationContext#SCOPE_SESSION("session")
+4. org.springframework.web.context.WebApplicationContext#SCOPE_SESSION("session") > 给每一个http session新建一个Bean实例
 
 @Lazy
 ------
