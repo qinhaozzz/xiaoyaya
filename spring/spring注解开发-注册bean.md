@@ -1,9 +1,12 @@
 # Spring Bean的注册方式
 ## 注册方式
 常用的bean注册方式有以下四种
-* @ComponentScan自动扫描配置包名下所有使用@Service、@Compent、@Repository、@Controller的类，并注册为Bean.
+* @ComponentScan自动扫描配置包名下所有使用@Service、@Compent、@Repository、@Controller的类，并注册为Bean
+
 * @Bean在配置类中进行注册，经常用来导入引入的第三方Jar
+
 * @Import，快速给容器中注册一个bean
+
 * FactoryBean，首先它是一个bean，是一个可以创建对象的工厂bean，可以用来手动创建bean
 
 ## Spring Bean注册相关注解
