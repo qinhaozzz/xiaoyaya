@@ -1,5 +1,13 @@
-@Configuration
-------
+# Spring Bean的注册方式
+## 注册方式
+常用的bean注册方式有以下四种
+* @ComponentScan自动扫描配置包名下所有使用@Service、@Compent、@Repository、@Controller的类，并注册为Bean.
+* @Bean在配置类中进行注册，经常用来导入引入的第三方Jar
+* @Import，快速给容器中注册一个bean
+* FactoryBean，首先它是一个bean，是一个可以创建对象的工厂bean，可以用来手动创建bean
+
+## Spring Bean注册相关注解
+### @Configuration
 **简介**
 
 声明当前类是一个配置类，相当于一个Spring配置的xml文件。把一个类作为一个IoC容器
@@ -20,8 +28,7 @@ MyBean myBean = ctx.getBean(MyBean.class);
 AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
 MyBean myBean = ctx.getBean(MyBean.class);
 ```
-@Bean
-------
+### @Bean
 **简介**
 
 声明当前方法的返回值为一个Bean，和`<bean/>标签`功能相同
@@ -31,8 +38,7 @@ MyBean myBean = ctx.getBean(MyBean.class);
 
 2. bean默认类型为方法返回类型
 
-@ComponentScan
-------
+### @ComponentScan
 **简介**
 
 自动扫描配置包名下所有使用@Service、@Compent、@Repository、@Controller的类，并注册为Bean.
@@ -85,8 +91,7 @@ public enum FilterType {
 // 配置多个ComponentScan
 @ComponentScans(value={@ComponentScan(),@ComponentScan()})
 ```
-@ComponentScan自定义扫描规则——TypeFilter
-------
+### @ComponentScan自定义扫描规则——TypeFilter
 **简介**
 
 当@Filter中type为FilterType.CUSTOM时，需要传入TypeFilter的实现类，通过自定义的规则判断当前扫描的类是否匹配
@@ -128,8 +133,7 @@ public class CustomTypeFilter implements TypeFilter {
     }
 }
 ```
-@Scope
-------
+### @Scope
 **简介**
 
 IOC容器中注册bean的作用域
@@ -144,8 +148,7 @@ IOC容器中注册bean的作用域
 
 4. org.springframework.web.context.WebApplicationContext#SCOPE_SESSION("session") > 给每一个http session新建一个Bean实例
 
-@Lazy
-------
+### @Lazy
 **简介**
 
 懒加载：容器启动时不创建对象，第一次获取对象getBean时才会创建并初始化对象
@@ -189,16 +192,14 @@ public class MainConfig2 {
     }
 }
 ```
-@Conditaional
-------
+### @Conditaional
 **简介**
 
 根据条件判断该Bean是否需要被注册
 
 **详情**
 
-@Profile
-------
+### @Profile
 **简介**
 
 profile就是一组配置，不同profile提供不同组合的配置，程序运行时可以选择使用哪些profile来适应环境。功能与@Conditional类似，都是当bean达到特定的条件时才会被注册。常用的profile配置方法有三种如下:
